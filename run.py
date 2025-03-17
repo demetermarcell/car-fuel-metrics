@@ -12,9 +12,38 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('ci_car_fuel_metrics')
 
-honda_fit = SHEET.worksheet('honda_fit')
 
-data = honda_fit.get_all_values()
+def select_mode():
+    """
+    Function to select the mode of the app.
+    Run a while loop until the user selects a valid mode.
+    Calls the data_input() function if mode is 1.
+    Calls the select_metrics() function if mode is 2.
+    """
+    while True:
+        print("Please select mode:")
+        print("1: Input Fueling Data")
+        print("2: View Metrics")
+
+        mode = input("Enter your selected mode's number: \n")
+
+        if mode == "1":
+            data_input()
+            break
+        elif mode == "2":
+            select_metrics()
+            break
+        else:
+            print("Invalid input. Please try again.")
 
 
-print(data)
+def data_input():
+    print("Data Input Mode")
+
+
+def select_metrics():
+    print("Metrics Mode")
+
+
+print("Welcome to the Car Fuel Metrics App")
+select_mode()
