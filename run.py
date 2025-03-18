@@ -11,8 +11,10 @@ CREDS = Credentials.from_service_account_file('cfmcred.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('ci_car_fuel_metrics')
+WORKSHEET = SHEET.worksheet('fuel_data')
 
 
+# Navigation functions:
 def select_mode():
     """
     Function to select the mode of the app.
@@ -77,6 +79,10 @@ def select_metrics():
 
 def latest_metrics():
     print("Latest Metrics")
+    latest_trip_distance = calculate_latest_trip_distance()
+    latest_gas_mileage = calculate_latest_gas_mileage()
+    print(f"Latest Trip Distance: {latest_trip_distance}km.")
+    print(f"Latest Gas Mileage: {latest_gas_mileage}l/100km.\n")
     navigate_metrics()
 
 
@@ -113,5 +119,46 @@ def navigate_metrics():
             print("Invalid input. Please try again.")
 
 
+# Latest metrics calculation functions:
+def calculate_latest_trip_distance():
+    """
+    Function to calculate the latest trip distance.
+    """
+    print("Calculating Latest Trip Distance")
+
+
+def calculate_latest_gas_mileage():
+    """
+    Function to calculate the latest gas mileage.
+    """
+    print("Calculating Latest Gas Mileage")
+    return 10
+
+
+# Validate data retrieval from Google Sheets:
+def validate_odo_data():
+    """
+    Function to validate odometer readings data.
+    """
+    odo_data = WORKSHEET.col_values(2)
+    # Check if there are no readings or only the header row.
+    if not odo_data or len(odo_data) < 2:
+        print("Not enough odometer readings data available.")
+    else:
+        # Remove first item (header row).
+        odo_data = odo_data[1:]
+        # Converts all items to integers and checks if they are all digits.
+        if all(str(item).isdigit() for item in odo_data):
+            # Converts all items to integers and returns them in a list.
+            validated_odo_data = list(map(int, odo_data)) # type: ignore
+            print(validated_odo_data)
+            return validated_odo_data
+        else:
+            print("Odometer readings data is invalid.")
+            return None   
+
+# Run the app:
 print("Welcome to the Car Fuel Metrics App")
-select_mode()
+# select_mode()
+
+validate_odo_data()
