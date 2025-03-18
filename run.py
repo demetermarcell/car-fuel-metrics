@@ -88,7 +88,17 @@ def latest_metrics():
 
 
 def annual_metrics():
-    print("Annual Metrics")
+    print("Annual Metrics:")
+    total_distance = calculate_total_trip_distance()
+    total_fuel_quantity = calculate_total_fuel_quantity()
+    total_fuel_cost = calculate_total_fuel_cost()
+    average_gas_mileage = calculate_total_average_gas_mileage()
+    average_fuel_price = calculate_total_average_fuel_price()
+    print(f"Total Trip Distance: {total_distance}km.")
+    print(f"Total Fuel Quantity: {total_fuel_quantity}l.")
+    print(f"Total Fuel Cost: ${total_fuel_cost}EUR.")
+    print(f"Average Gas Mileage: {average_gas_mileage}l/100km.")
+    print(f"Average Fuel Price: ${average_fuel_price}EUR/l.\n")
     navigate_metrics()
 
 
@@ -179,7 +189,7 @@ def calculate_total_fuel_cost():
     """
     fuel_cost_data = validate_data(4)
     total_fuel_cost = sum(fuel_cost_data)  # type: ignore
-    return total_fuel_cost
+    return round(total_fuel_cost, 2)
 
 
 def calculate_total_average_gas_mileage():
@@ -196,6 +206,20 @@ def calculate_total_average_gas_mileage():
     total_trip_distance = float(calculate_total_trip_distance())
     total_fuel_quantity = calculate_total_fuel_quantity()
     return round(total_fuel_quantity / total_trip_distance * 100, 2)
+
+
+def calculate_total_average_fuel_price():
+    """
+    Function to calculate the total average fuel price
+    Calls the calculate_total_fuel_cost() function to get the total fuel cost.
+    Calls the calculate_total_fuel_quantity() function to get the total fuel
+    quantity.
+    Calculates the total average fuel price by dividing the total fuel cost by
+    the total fuel quantity.
+    """
+    total_fuel_cost = calculate_total_fuel_cost()
+    total_fuel_quantity = calculate_total_fuel_quantity()
+    return round(total_fuel_cost / total_fuel_quantity, 2)
 
 
 # Validate data retrieval from Google Sheets:
@@ -273,6 +297,4 @@ def validate_date_data(date_data):
 
 # Run the app:
 print("Welcome to the Car Fuel Metrics App")
-# select_mode()
-print(type(calculate_total_fuel_quantity()))
-print(type(calculate_total_trip_distance()))
+select_mode()
