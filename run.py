@@ -139,7 +139,7 @@ def calculate_latest_gas_mileage():
 def calculate_latest_trip_distance():
     """
     Function to calculate the latest trip distance.
-    Calls the validate_data() function to validate odometer readings data.
+    Calls the validate_data(2) function to validate odometer readings data.
     Calculates the latest trip distance by subtracting the last two readings.
     """
     odo_data = validate_data(2)
@@ -151,13 +151,51 @@ def calculate_latest_trip_distance():
 def calculate_total_trip_distance():
     """
     Function to calculate the total trip distance.
-    Calls the validate_data() function to validate odometer readings data.
+    Calls the validate_data(2) function to validate odometer readings data.
     Calculates the total trip distance by subtracting the first and last
     readings.
     """
     odo_data = validate_data(2)
     total_trip_distance = odo_data[-1] - odo_data[0]  # type: ignore
     return total_trip_distance
+
+
+def calculate_total_fuel_quantity():
+    """
+    Function to calculate the total fuel quantity.
+    Calls the validate_data(3) function to validate fuel quantity data.
+    Calculates the total fuel quantity by summing all the fuel quantity data.
+    """
+    fuel_quantity_data = validate_data(3)
+    total_fuel_quantity = sum(fuel_quantity_data)  # type: ignore
+    return total_fuel_quantity
+
+
+def calculate_total_fuel_cost():
+    """
+    Function to calculate the total fuel cost.
+    Calls the validate_data(4) function to validate fuel cost data.
+    Calculates the total fuel cost by summing all the fuel cost data.
+    """
+    fuel_cost_data = validate_data(4)
+    total_fuel_cost = sum(fuel_cost_data)  # type: ignore
+    return total_fuel_cost
+
+
+def calculate_total_average_gas_mileage():
+    """
+    Function to calculate the total average gas mileage.
+    Calls the calculate_total_trip_distance() function to get the total trip
+    distance and converts it to a float.
+    Calls the calculate_total_fuel_quantity() function to get the total fuel
+    quantity.
+    Calculates the total average gas mileage by dividing the total fuel
+    quantity by the total trip distance and multiplying by 100 resulting in
+    l/100km.
+    """
+    total_trip_distance = float(calculate_total_trip_distance())
+    total_fuel_quantity = calculate_total_fuel_quantity()
+    return round(total_fuel_quantity / total_trip_distance * 100, 2)
 
 
 # Validate data retrieval from Google Sheets:
@@ -235,4 +273,6 @@ def validate_date_data(date_data):
 
 # Run the app:
 print("Welcome to the Car Fuel Metrics App")
-select_mode()
+# select_mode()
+print(type(calculate_total_fuel_quantity()))
+print(type(calculate_total_trip_distance()))
