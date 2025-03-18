@@ -124,6 +124,11 @@ def navigate_metrics():
 def calculate_latest_gas_mileage():
     """
     Function to calculate the latest gas mileage.
+    Calls the calculate_latest_trip_distance() function to get the latest trip
+    distance nad converts it to a float.
+    Calls the validate_data(3) function to get the fuel quantity data.
+    Calculates the latest fuel quantity by dividing the latest fuel quantity
+    by the latest trip distance and multiplying by 100 resulting in l/100km.
     """
     latest_trip_distance = float(calculate_latest_trip_distance())
     fuel_quantity_data = validate_data(3)  # This is a list of floats
@@ -142,10 +147,25 @@ def calculate_latest_trip_distance():
     return latest_trip_distance
 
 
+# Total ownership metrics calculation functions:
+def calculate_total_trip_distance():
+    """
+    Function to calculate the total trip distance.
+    Calls the validate_data() function to validate odometer readings data.
+    Calculates the total trip distance by subtracting the first and last
+    readings.
+    """
+    odo_data = validate_data(2)
+    total_trip_distance = odo_data[-1] - odo_data[0]  # type: ignore
+    return total_trip_distance
+
+
 # Validate data retrieval from Google Sheets:
 def validate_data(col_num):
     """
     Function to validate data retrieval from Google Sheets.
+    Retreives data from the Google Sheet based on the column number,
+    and calls the appropriate validation function.
     """
     try:
         data = WORKSHEET.col_values(col_num)
