@@ -120,23 +120,26 @@ def navigate_metrics():
 
 
 # Latest metrics calculation functions:
-def calculate_latest_trip_distance():
-    """
-    Function to calculate the latest trip distance.
-    Calls the validate_odo_data() function to validate odometer readings data.
-    Calculates the latest trip distance by subtracting the last two readings.
-    """
-    validated_odo_data = validate_data(2)
-    latest_trip_distance = validated_odo_data[-1] - validated_odo_data[-2]  # type: ignore
-    return latest_trip_distance
-
-
 def calculate_latest_gas_mileage():
     """
     Function to calculate the latest gas mileage.
     """
     print("Calculating Latest Gas Mileage")
-    return 10
+    latest_trip_distance = float(calculate_latest_trip_distance())
+    fuel_quantity_data = validate_data(3)  # This is a list of floats
+    latest_fuel_quantity = fuel_quantity_data[-1]  # type: ignore
+    return round(latest_fuel_quantity / latest_trip_distance * 100, 2)
+
+
+def calculate_latest_trip_distance():
+    """
+    Function to calculate the latest trip distance.
+    Calls the validate_data() function to validate odometer readings data.
+    Calculates the latest trip distance by subtracting the last two readings.
+    """
+    odo_data = validate_data(2)
+    latest_trip_distance = odo_data[-1] - odo_data[-2]  # type: ignore
+    return latest_trip_distance
 
 
 # Validate data retrieval from Google Sheets:
@@ -182,7 +185,7 @@ def validate_int_data(int_data):
     else:
         print("Odometer readings data is invalid.")
         return None
- 
+
 
 def validate_float_data(float_data, col_num):
     """
@@ -216,8 +219,4 @@ def validate_date_data(date_data):
 
 # Run the app:
 print("Welcome to the Car Fuel Metrics App")
-# select_mode()
-validate_data(1)
-validate_data(2)
-validate_data(3)
-validate_data(4)
+select_mode()
