@@ -126,8 +126,8 @@ def calculate_latest_trip_distance():
     Calls the validate_odo_data() function to validate odometer readings data.
     Calculates the latest trip distance by subtracting the last two readings.
     """
-    validated_odo_data = validate_odo_data()
-    latest_trip_distance = validated_odo_data[-1] - validated_odo_data[-2] # type: ignore
+    validated_odo_data = validate_data(2)
+    latest_trip_distance = validated_odo_data[-1] - validated_odo_data[-2]  # type: ignore
     return latest_trip_distance
 
 
@@ -140,26 +140,84 @@ def calculate_latest_gas_mileage():
 
 
 # Validate data retrieval from Google Sheets:
-def validate_odo_data():
+def validate_data(col_num):
     """
-    Function to validate odometer readings data.
+    Function to validate data retrieval from Google Sheets.
     """
-    odo_data = WORKSHEET.col_values(2)
-    # Check if there are no readings or only the header row.
-    if not odo_data or len(odo_data) < 2:
-        print("Not enough odometer readings data available.")
-    else:
-        # Remove first item (header row).
-        odo_data = odo_data[1:]
-        # Converts all items to integers and checks if they are all digits.
-        if all(str(item).isdigit() for item in odo_data):
-            # Converts all items to integers and returns them in a list.
-            return list(map(int, odo_data))   # type: ignore
-        else:
-            print("Odometer readings data is invalid.")
+    try:
+        data = WORKSHEET.col_values(col_num)
+        # Check if there are no readings or only the header row.
+        if not data or len(data) < 2:
+            print("Not enough data available.")
             return None
+        else:
+            # Remove first item (header row).
+            data = data[1:]
+            if col_num == 1:  # Date column
+                return (validate_date_data(data))
+            elif col_num == 2:  # Odometer readings column
+                return (validate_int_data(data))
+            elif col_num == 3:  # Fuel quantity column
+                return (validate_float_data(data, col_num))
+            elif col_num == 4:  # Fuel cost column
+                return (validate_float_data(data, col_num))
+            else:
+                print("Invalid column number.")
+                return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+def validate_int_data(int_data):
+    """
+    Function to validate if odometer readings data is integers.
+    """
+    # Converts all items to integers and checks if they are all digits.
+    if all(str(item).isdigit() for item in int_data):
+        # Converts all items to integers and returns them in a list.
+        test_data = list(map(int, int_data))
+        print(test_data)
+        return list(map(int, int_data))   # type: ignore
+    else:
+        print("Odometer readings data is invalid.")
+        return None
+ 
+
+def validate_float_data(float_data, col_num):
+    """
+    Function to validate float data.
+    """
+    if all(str(item).replace('.', '', 1).isdigit() for item in float_data):
+        test_data = list(map(float, float_data))
+        print(test_data)
+        return list(map(float, float_data))
+    else:
+        if col_num == 3:
+            type_data = "Fuel quantity"
+        elif col_num == 4:
+            type_data = "Fuel cost"
+        print(f"{type_data} data is invalid.")
+        return None
+
+
+def validate_date_data(date_data):
+    """
+    Function to validate date data.
+    """
+    # Check if all items are in the format yyyy.mm.dd.
+    if all(item.count('.') == 2 for item in date_data):
+        print(date_data)
+        return date_data
+    else:
+        print("Date data is invalid.")
+        return None
 
 
 # Run the app:
 print("Welcome to the Car Fuel Metrics App")
-select_mode()
+# select_mode()
+validate_data(1)
+validate_data(2)
+validate_data(3)
+validate_data(4)
