@@ -78,10 +78,10 @@ def select_metrics():
 
 
 def latest_metrics():
-    print("Latest Metrics")
-    latest_trip_distance = calculate_latest_trip_distance()
+    print("Latest Fueling Metrics:")
+    trip_distance = calculate_latest_trip_distance()
     latest_gas_mileage = calculate_latest_gas_mileage()
-    print(f"Latest Trip Distance: {latest_trip_distance}km.")
+    print(f"Latest Trip Distance: {trip_distance}km.")
     print(f"Latest Gas Mileage: {latest_gas_mileage}l/100km.\n")
     navigate_metrics()
 
@@ -123,8 +123,12 @@ def navigate_metrics():
 def calculate_latest_trip_distance():
     """
     Function to calculate the latest trip distance.
+    Calls the validate_odo_data() function to validate odometer readings data.
+    Calculates the latest trip distance by subtracting the last two readings.
     """
-    print("Calculating Latest Trip Distance")
+    validated_odo_data = validate_odo_data()
+    latest_trip_distance = validated_odo_data[-1] - validated_odo_data[-2] # type: ignore
+    return latest_trip_distance
 
 
 def calculate_latest_gas_mileage():
@@ -150,15 +154,12 @@ def validate_odo_data():
         # Converts all items to integers and checks if they are all digits.
         if all(str(item).isdigit() for item in odo_data):
             # Converts all items to integers and returns them in a list.
-            validated_odo_data = list(map(int, odo_data)) # type: ignore
-            print(validated_odo_data)
-            return validated_odo_data
+            return list(map(int, odo_data))   # type: ignore
         else:
             print("Odometer readings data is invalid.")
-            return None   
+            return None
+
 
 # Run the app:
 print("Welcome to the Car Fuel Metrics App")
-# select_mode()
-
-validate_odo_data()
+select_mode()
