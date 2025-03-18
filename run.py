@@ -60,6 +60,7 @@ def select_metrics():
         print("4: Back to Mode Selection")
 
         mode = input("Enter the number of your selected metrics: \n")
+        print("\n")
 
         if mode == "1":
             latest_metrics()
@@ -124,7 +125,6 @@ def calculate_latest_gas_mileage():
     """
     Function to calculate the latest gas mileage.
     """
-    print("Calculating Latest Gas Mileage")
     latest_trip_distance = float(calculate_latest_trip_distance())
     fuel_quantity_data = validate_data(3)  # This is a list of floats
     latest_fuel_quantity = fuel_quantity_data[-1]  # type: ignore
@@ -179,8 +179,6 @@ def validate_int_data(int_data):
     # Converts all items to integers and checks if they are all digits.
     if all(str(item).isdigit() for item in int_data):
         # Converts all items to integers and returns them in a list.
-        test_data = list(map(int, int_data))
-        print(test_data)
         return list(map(int, int_data))   # type: ignore
     else:
         print("Odometer readings data is invalid.")
@@ -192,8 +190,6 @@ def validate_float_data(float_data, col_num):
     Function to validate float data.
     """
     if all(str(item).replace('.', '', 1).isdigit() for item in float_data):
-        test_data = list(map(float, float_data))
-        print(test_data)
         return list(map(float, float_data))
     else:
         if col_num == 3:
