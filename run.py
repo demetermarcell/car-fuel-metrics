@@ -32,7 +32,7 @@ def select_mode():
         mode = input("Enter the number of your selected mode: \n")
 
         if mode == "1":
-            odo_data_input()
+            data_input()
             break
         elif mode == "2":
             select_metrics()
@@ -412,7 +412,7 @@ def confirm_data_input(odo_data, fuel_quantity, fuel_cost):
             data_input()
             break
         elif confirm_data == "3":
-            print("Data input cancelled.")
+            print("Data input cancelled.\n")
             select_mode()
             break
         else:
@@ -448,6 +448,4 @@ def data_input():
 
 # Run the app:
 print("Welcome to the Car Fuel Metrics App")
-# select_mode()
-
-data_input()
+select_mode()
