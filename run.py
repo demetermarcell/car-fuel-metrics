@@ -406,9 +406,9 @@ def confirm_data_input(odo_data, fuel_quantity, fuel_cost):
     new_data_input = [odo_data, fuel_quantity, fuel_cost]
     while True:
         print("Please confirm your data inputs:")
-        print(f"Odometer: {odo_data}km")
-        print(f"Fuel Quantity: {fuel_quantity}l")
-        print(f"Fuel Cost: {fuel_cost}EUR\n")
+        print(f"Odometer: {odo_data} km")
+        print(f"Fuel Quantity: {fuel_quantity} Litres")
+        print(f"Fuel Cost: {fuel_cost} EUR\n")
         print("Press number to select action:")
         print("1: Confirm, Save Data")
         print("2: Re-enter data")
