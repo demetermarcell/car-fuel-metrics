@@ -334,18 +334,29 @@ def validate_odo_input(odo_data):
     Checks if the data is an integer.
     Checks if the data is greater than the last reading.
     """
-    last_odo_data = validate_data(1)[-1]  # This is integer.
     if not odo_data.isdigit():
         print("Odometer readings data must be an integer.")
         return False
     else:
-        odo_data_int = int(odo_data)
+        try:
+            odo_data_int = int(odo_data)
+            odo_col_data = WORKSHEET.col_values(1)
+            if len(odo_col_data) < 2:
+                return True  # First entry, skipping validation.
 
-        if int(odo_data_int) < last_odo_data:
-            print("Odometer reading must be greater than the last reading.")
-            print(f"Last reading: {last_odo_data}")
-            return False
-        else:
+            last_odo_data = int(odo_col_data[-1])
+
+            if int(odo_data_int) < last_odo_data:
+                print(
+                    "Odometer reading must be greater than the last reading."
+                    )
+                print(f"Last reading: {last_odo_data}")
+                return False
+        except Exception:
+            print(
+                "Unable to retrieve last odometer reading."
+                "First entry, skipping validation."
+                )
             return True
 
 
@@ -374,7 +385,7 @@ def validate_fuel_data(fuel_quantity, fuel_cost):
             return True
     except ValueError:
         print(
-            "Invalid input. Fuel quantity and cost must be numberic values."
+            "Invalid input. Fuel quantity and cost must be numeric values."
             "Please try again."
             )
         return False
