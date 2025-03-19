@@ -292,9 +292,51 @@ def navigate_metrics():
 
 # Data input functions:
 def odo_data_input():
-    print("Please input the odometer readings.")
+    """
+    Function to input odometer readings data.
+    Run a while loop until the user inputs valid data.
+    Calls the validate_odo_input() function.
+    Calls the fuel_data_input() function if data entry is successful.
+    """
+    while True:
+        print("Please input your odometer readings data:")
+        print("Example: 123456")
+
+        odo_data = input("Enter the odometer readings here: \n")
+    
+        if validate_odo_input(odo_data):
+            print("Odometer readings data input successful.")
+            # fuel_data_input()
+            break
+    
+    return odo_data
+    
+    
+# def fuel_data_input():
+
+
+# Validate input data functions:
+def validate_odo_input(odo_data):
+    last_odo_data = validate_data(1)[-1] # This is integer.
+    print(last_odo_data)
+    if not odo_data.isdigit():
+        print("Odometer readings data must be an integer. Example: 123456")
+        return True
+
+    odo_data_int = int(odo_data)
+
+    if int(odo_data_int) > last_odo_data:
+        print(
+            f"Odometer readings data must be greater than the last reading."
+            f"Last reading: {last_odo_data}"
+        )
+        return True
+    else:
+        return False
 
 
 # Run the app:
 print("Welcome to the Car Fuel Metrics App")
-select_mode()
+# select_mode()
+
+odo_data_input()
