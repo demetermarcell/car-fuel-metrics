@@ -105,12 +105,12 @@ def total_ownership_metrics():
 # Latest metrics calculation functions:
 def calculate_latest_gas_mileage():
     """
-    Function to calculate the latest gas mileage.
-    Calls the calculate_latest_trip_distance() function to get the latest trip
-    distance nad converts it to a float.
-    Calls the validate_data(2) function to get the fuel quantity data.
-    Calculates the latest fuel quantity by dividing the latest fuel quantity
-    by the latest trip distance and multiplying by 100 resulting in l/100km.
+    Calculates the latest gas mileage.
+    Calls calculate_latest_trip_distance() to get the latest trip distance and
+    converts it to a float.
+    Calls validate_data(2) to get the fuel quantity data.
+    Computes gas mileage by dividing the latest fuel quantity by the latest
+    trip distance, then multiplying by 100 to get l/100km.
     """
     latest_trip_distance = float(calculate_latest_trip_distance())
     fuel_quantity_data = validate_data(2)  # This is a list of floats
@@ -132,11 +132,11 @@ def calculate_latest_trip_distance():
 # Total ownership metrics calculation functions:
 def calculate_total_trip_distance():
     """
-    Function to calculate the total trip distance.
-    Calls the validate_data(1) function to validate odometer readings data.
-    Calculates the total trip distance by subtracting the first and last
-    readings.
+    Calculates the total trip distance.
+    Calls validate_data(1) to retrieve odometer readings.
+    Computes total distance by subtracting the first reading from the last.
     """
+
     odo_data = validate_data(1)
     total_trip_distance = odo_data[-1] - odo_data[0]
     return total_trip_distance
@@ -198,7 +198,7 @@ def calculate_total_average_fuel_price():
 def validate_data(col_num):
     """
     Function to validate data retrieval from Google Sheets.
-    Retreives data from the Google Sheet based on the column number,
+    Retrieves data from the Google Sheet based on the column number,
     and calls the appropriate validation function.
     Throws an error message and returns to the mode selection menu if an error.
     """
@@ -225,7 +225,6 @@ def validate_data(col_num):
                     "Invalid column number."
                     "Please contact the developer for assistance."
                     )
-                select_mode()
     except Exception as e:
         print(f"An error occurred: {e}")
         select_mode()
@@ -234,37 +233,32 @@ def validate_data(col_num):
 def validate_int_data(int_data):
     """
     Function to validate if odometer readings data is integers.
-    Throws an error message and returns to the mode selection menu if an error.
+    Throws a value error message if validation fails.
     """
-    # Converts all items to integers and checks if they are all digits.
-    if all(str(item).isdigit() for item in int_data):
-        # Converts all items to integers and returns them in a list.
-        return list(map(int, int_data))
-    else:
+    try:
+        # Attempt to convert all items to integers
+        return [int(item) for item in int_data]
+    except ValueError:
         print(
-            "Odometer readings data is invalid."
+            "Odometer readings data is invalid. "
             "Please contact the developer for assistance."
-            )
-        select_mode()
+        )
 
 
 def validate_float_data(float_data, col_num):
     """
     Function to validate float data.
-    Throws an error message and returns to the mode selection menu if an error.
+    Throws a value error message and returns to the mode selection menu if an error.
     """
-    if all(str(item).replace('.', '', 1).isdigit() for item in float_data):
-        return list(map(float, float_data))
-    else:
-        if col_num == 2:
-            type_data = "Fuel quantity"
-        elif col_num == 3:
-            type_data = "Fuel cost"
+    try:
+        # Attempt to convert all items to floats
+        return [float(item) for item in float_data]
+    except ValueError:
+        type_data = "Fuel quantity" if col_num == 2 else "Fuel cost"
         print(
-            f"{type_data} data is invalid."
+            f"{type_data} data is invalid. "
             "Please contact the developer for assistance."
-            )
-        select_mode()
+        )
 
 
 # Menu Navigation function:
@@ -279,11 +273,11 @@ def navigate_metrics():
         print("To navigate back: \n")
         print("1: Select Mode Menu")
         print("2: Select Metrics Menu")
-        navigate_metrics = input("Enter the number of your selected menu \n")
-        if navigate_metrics == "1":
+        selection = input("Enter the number of your selected menu \n")
+        if selection == "1":
             select_mode()
             break
-        elif navigate_metrics == "2":
+        elif selection == "2":
             select_metrics()
             break
         else:
@@ -386,9 +380,9 @@ def validate_fuel_data(fuel_quantity, fuel_cost):
 
 def confirm_data_input(odo_data, fuel_quantity, fuel_cost):
     """
-    Function to confirm data input.
-    Run a while loop until the user confirms the data input.
-    Calls the select_mode() function if data entry is successful.
+    Confirms data input.
+    Runs a loop until the user confirms the data.
+    Calls select_mode() if data entry is successful.
     """
 
     new_data_input = [odo_data, fuel_quantity, fuel_cost]
