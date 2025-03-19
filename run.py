@@ -248,7 +248,7 @@ def validate_int_data(int_data):
 def validate_float_data(float_data, col_num):
     """
     Function to validate float data.
-    Throws a value error message and returns to the mode selection menu if an error.
+    Throws a value error message if an error.
     """
     try:
         # Attempt to convert all items to floats
@@ -355,20 +355,14 @@ def validate_fuel_data(fuel_quantity, fuel_cost):
     Checks if the data is less than 40 for fuel quantity.
     (40 is the maximum capacity of the fuel tank)
     """
-    if not fuel_quantity.replace('.', '', 1).isdigit():
-        print("Fuel quantity must be a float.")
-        return False
-    elif not fuel_cost.replace('.', '', 1).isdigit():
-        print("Fuel cost must be a float.")
-        return False
-    else:
+    try:
         fuel_quantity_float = float(fuel_quantity)
         fuel_cost_float = float(fuel_cost)
 
         if fuel_quantity_float <= 0:
             print("Fuel quantity must be greater than 0.")
             return False
-        elif fuel_quantity_float >= 40:
+        elif fuel_quantity_float > 40:
             print("Fuel quantity must not exceed 40.")
             return False
         elif fuel_cost_float <= 0:
@@ -376,6 +370,12 @@ def validate_fuel_data(fuel_quantity, fuel_cost):
             return False
         else:
             return True
+    except ValueError:
+        print(
+            "Invalid input. Fuel quantity and cost must be numberic values."
+            "Please try again."
+            )
+        return False
 
 
 def confirm_data_input(odo_data, fuel_quantity, fuel_cost):
