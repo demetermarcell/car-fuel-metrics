@@ -7,7 +7,7 @@ The app provides  the user with valuable insights into their car's fuel consumpt
 
 You can find the link to the deployed application here: [LINK](https://ci-p3-car-fuel-metrics-3173a2b36120.herokuapp.com/)
 
-![Responsive Preview](https://ui.dev/amiresponsive?url=https%3A%2F%2Fci-p3-car-fuel-metrics-3173a2b36120.herokuapp.com%2F)
+<img src="assets/cfm-resp-mockup.webp" alt="Responsive Mockups" width="600" height ="372">
 
 ## Features:
 
