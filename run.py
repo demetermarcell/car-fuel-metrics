@@ -303,16 +303,33 @@ def odo_data_input():
         print("Example: 123456")
 
         odo_data = input("Enter the odometer readings here: \n")
-    
+
         if validate_odo_input(odo_data):
             print("Odometer readings data input successful.")
-            # fuel_data_input()
+            fuel_data_input()
             break
-    
+
     return odo_data
-    
-    
-# def fuel_data_input():
+
+
+def fuel_data_input():
+    """
+    Function to input fueling data.
+    Run a while loop until the user inputs valid data.
+    Calls the validate_fuel_data() function.
+    Calls the select_mode() function if data entry is successful.
+    """
+    while True:
+        print("Please input your fueling data:")
+        print("Example: 45.67")
+
+        fuel_quantity = input("Enter the fuel quantity here: \n")
+        fuel_cost = input("Enter the fuel cost here: \n")
+
+        if validate_fuel_data(fuel_quantity, fuel_cost):
+            print("Fueling data input successful.")
+            break
+    return fuel_quantity, fuel_cost
 
 
 # Validate input data functions:
@@ -322,7 +339,7 @@ def validate_odo_input(odo_data):
     Checks if the data is an integer.
     Checks if the data is greater than the last reading.
     """
-    last_odo_data = validate_data(1)[-1] # This is integer.
+    last_odo_data = validate_data(1)[-1]  # This is integer.
     if not odo_data.isdigit():
         print("Odometer readings data must be an integer.")
         return False
@@ -332,6 +349,37 @@ def validate_odo_input(odo_data):
         if int(odo_data_int) < last_odo_data:
             print("Odometer reading must be greater than the last reading.")
             print(f"Last reading: {last_odo_data}")
+            return False
+        else:
+            return True
+
+
+def validate_fuel_data(fuel_quantity, fuel_cost):
+    """
+    Function to validate fueling data input.
+    Checks if the data is a float.
+    Checks if the data is greater than 0.
+    Checks if the data is less than 40 for fuel quantity.
+    (40 is the maximum capacity of the fuel tank)
+    """
+    if not fuel_quantity.replace('.', '', 1).isdigit():
+        print("Fuel quantity must be a float.")
+        return False
+    elif not fuel_cost.replace('.', '', 1).isdigit():
+        print("Fuel cost must be a float.")
+        return False
+    else:
+        fuel_quantity_float = float(fuel_quantity)
+        fuel_cost_float = float(fuel_cost)
+
+        if fuel_quantity_float <= 0:
+            print("Fuel quantity must be greater than 0.")
+            return False
+        elif fuel_quantity_float >= 40:
+            print("Fuel quantity must not exceed 40.")
+            return False
+        elif fuel_cost_float <= 0:
+            print("Fuel cost must be greater than 0.")
             return False
         else:
             return True
