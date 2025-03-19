@@ -33,16 +33,34 @@ You can find the link to the deployed application here: [LINK](https://ci-p3-car
 
 4. **Data validation and error handling**: The app validates navigation inputs, fueling data, and data retrieved from Google Sheets. It ensures correct data types, checks for missing or invalid entries, and provides clear error messages to guide users in correcting any issues.
 
+### Features left to implement:
+Features Left to Implement
+
+Enhancing the dataset with refueling dates would allow the introduction of annual metrics, improving the app’s usability and analytical capabilities. By filtering data based on a user-selected year, the app could provide insights into yearly fuel consumption trends.
+
+Planned Key Metrics:
+
+- Annual Fuel Cost
+- Annual Total Distance
+- Annual Consumed Fuel
+- Annual Average Gas Mileage
+- Annual Average Fuel Price
+
 ## Data Model
 The Car Fuel Metrics app uses a structured data model to track fueling and performance metrics. The primary data consists of three key elements: odometer readings, fuel quantity (litres), and fuel cost (EUR). These values are inputted by the user and stored in a Google Sheet, with each row representing a fueling event. The app validates this data, ensuring accurate entries by checking data types and consistency between odometer readings. Once validated, the app calculates key metrics, including trip distance, gas mileage, total fuel usage, total fuel cost, average gas mileage, and average fuel price. The data model allows for easy retrieval and aggregation of historical fueling data to generate both the latest refueling and total ownership metrics. This organized structure helps users track fuel efficiency and costs over time.
 
 The app utilizes the gspread and google.oauth2.service_account libraries to facilitate API communication between the app and Google Drive/Sheets. It uses a ServiceAccount token, which is generated via Google Cloud, to authenticate the app. The client email has been shared with the Google Sheets worksheet as an editor, granting the app the necessary permissions to access and modify the data in the sheet. This setup enables seamless data retrieval and storage for tracking fueling metrics.
 
 ## Testing
-- navigation functions have been tested
-- calculate metrics functions have beent tested
-- data input functions have been tested with incorrect data
-- data validation functions on data retreival have been tested with incorrect data
+Comprehensive testing was conducted to ensure the reliability and accuracy of the application. The following aspects were tested:
+- Navigation Functions: Verified that users can successfully navigate between menus, select modes, and access different features without unexpected behavior.
+- Metric Calculations: Ensured that all fuel consumption and cost calculations produce accurate results based on stored data.
+- Data Input Validation: Tested input fields with incorrect data formats (e.g., non-numeric characters, negative values, excessively high values) to confirm that appropriate error messages were displayed and invalid data was rejected.
+- Data Retrieval & Validation: Simulated retrieval of incorrect or incomplete data from Google Sheets to verify that errors were caught, informative messages were displayed, and the application remained functional.
+- Tested unexpected user inputs to ensure the application gracefully manages errors and provides clear guidance to users.
+
+These tests confirm that the application is stable, correctly processes user inputs, and reliably retrieves and validates data while preventing incorrect entries.
+
 ### Solved Bugs
 - "validate_odo_input" function did not handle happy path after it was refactored.
 - No other bugs were identified after the first deployment.
