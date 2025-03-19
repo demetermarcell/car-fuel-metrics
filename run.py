@@ -14,7 +14,7 @@ SHEET = GSPREAD_CLIENT.open('ci_car_fuel_metrics')
 WORKSHEET = SHEET.worksheet('fuel_data')
 
 
-# Navigation functions:
+# Menu Navigation functions:
 def select_mode():
     """
     Function to select the mode of the app.
@@ -39,10 +39,6 @@ def select_mode():
             print("Invalid input. Please try again.")
 
 
-def data_input():
-    print("Data Input Mode")
-
-
 def select_metrics():
     """
     Function to select metrics type.
@@ -60,13 +56,12 @@ def select_metrics():
         print("4: Back to Mode Selection")
 
         mode = input("Enter the number of your selected metrics: \n")
-        print("\n")
 
         if mode == "1":
             latest_metrics()
             break
         elif mode == "2":
-            annual_metrics()
+            select_year()
             break
         elif mode == "3":
             total_ownership_metrics()
@@ -78,6 +73,24 @@ def select_metrics():
             print("Invalid input. Please try again.")
 
 
+def select_year():
+    available_years = get_years()
+    if not available_years or len(available_years) < 1:
+        print("No data available.")
+        select_metrics()
+    else:
+        while True:
+            print("Available Years:")
+            for year in available_years:
+                print(year)
+            selected_year = input("Enter the year you would like to view: \n")
+            if selected_year in available_years:
+                annual_metrics(selected_year)
+                break
+            else:
+                print("Incorrect input value, please enter an available year.")
+
+
 def latest_metrics():
     print("Latest Fueling Metrics:")
     trip_distance = calculate_latest_trip_distance()
@@ -87,8 +100,13 @@ def latest_metrics():
     navigate_metrics()
 
 
-def annual_metrics():
-    print("Annual Metrics:")
+def annual_metrics(selected_year):
+    print(f"Metrics for {selected_year}")
+    navigate_metrics()
+
+
+def total_ownership_metrics():
+    print("Total Ownership Metrics")
     total_distance = calculate_total_trip_distance()
     total_fuel_quantity = calculate_total_fuel_quantity()
     total_fuel_cost = calculate_total_fuel_cost()
@@ -99,11 +117,6 @@ def annual_metrics():
     print(f"Total Fuel Cost: ${total_fuel_cost}EUR.")
     print(f"Average Gas Mileage: {average_gas_mileage}l/100km.")
     print(f"Average Fuel Price: ${average_fuel_price}EUR/l.\n")
-    navigate_metrics()
-
-
-def total_ownership_metrics():
-    print("Total Ownership Metrics")
     navigate_metrics()
 
 
@@ -143,7 +156,7 @@ def calculate_latest_gas_mileage():
     latest_trip_distance = float(calculate_latest_trip_distance())
     fuel_quantity_data = validate_data(3)  # This is a list of floats
     latest_fuel_quantity = fuel_quantity_data[-1]  # type: ignore
-    return round(latest_fuel_quantity / latest_trip_distance * 100, 2)
+    return round(latest_fuel_quantity / latest_trip_distance * 100, 2)  # type: ignore
 
 
 def calculate_latest_trip_distance():
@@ -222,6 +235,18 @@ def calculate_total_average_fuel_price():
     return round(total_fuel_cost / total_fuel_quantity, 2)
 
 
+# Annual metrics calculation functions:
+def get_years():
+    """
+    Function to get all the years from the Google Sheet.
+    Calls the validate_data(1) function to validate the data.
+    """
+    date_data = validate_data(1)
+    years = [date_data.split('.')[0] for date_data in date_data]  # type: ignore
+    unique_years = sorted(list(set(years)))
+    return unique_years
+
+
 # Validate data retrieval from Google Sheets:
 def validate_data(col_num):
     """
@@ -288,11 +313,15 @@ def validate_date_data(date_data):
     """
     # Check if all items are in the format yyyy.mm.dd.
     if all(item.count('.') == 2 for item in date_data):
-        print(date_data)
         return date_data
     else:
         print("Date data is invalid.")
         return None
+
+
+# Data input functions:
+def data_input():
+    print("Data Input Mode")
 
 
 # Run the app:
