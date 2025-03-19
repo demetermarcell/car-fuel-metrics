@@ -18,6 +18,7 @@ WORKSHEET = SHEET.worksheet('fuel_data')
 
 # Main Metrics functions:
 def latest_metrics():
+    """This function prints metrics from the latest refueling."""
     print("Latest Fueling Metrics:")
     trip_distance = calculate_latest_trip_distance()
     latest_gas_mileage = calculate_latest_gas_mileage()
@@ -27,11 +28,13 @@ def latest_metrics():
 
 
 def annual_metrics(selected_year):
+    """This function prints the annual metrics for the selected year."""
     print(f"Metrics for {selected_year}")
     navigate_metrics()
 
 
 def total_ownership_metrics():
+    """This function prints the total ownership metrics."""
     print("Total Ownership Metrics")
     total_distance = calculate_total_trip_distance()
     total_fuel_quantity = calculate_total_fuel_quantity()

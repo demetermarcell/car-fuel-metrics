@@ -62,6 +62,12 @@ def select_metrics():
 
 
 def select_year():
+    """
+    Function to select the year for annual metrics.
+    Run a while loop until the user selects a valid year.
+    Calls the annual_metrics() function with the selected year
+    if the selected year is available in the data.
+    """
     available_years = metrics.get_years()
     if not available_years or len(available_years) < 1:
         print("No data available.")
