@@ -316,8 +316,10 @@ def fuel_data_input():
         print("Please input your fueling data:")
         print("Example: 23.45")
 
-        fuel_quantity = input("Enter the fuel quantity here: \n")
-        fuel_cost = input("Enter the fuel cost here: \n")
+        fuel_quantity = input(
+            "Enter the fuel quantity in litres (e.g., 23.45):\n"
+            )
+        fuel_cost = input("Enter the fuel cost in EUR (e.g., 45.67):\n")
 
         if validate_fuel_data(fuel_quantity, fuel_cost):
             print("Fueling data input successful.")
