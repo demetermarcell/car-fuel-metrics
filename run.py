@@ -115,7 +115,7 @@ def calculate_latest_gas_mileage():
     latest_trip_distance = float(calculate_latest_trip_distance())
     fuel_quantity_data = validate_data(2)  # This is a list of floats
     latest_fuel_quantity = fuel_quantity_data[-1]  # type: ignore
-    return round(latest_fuel_quantity / latest_trip_distance * 100, 2)  # type: ignore
+    return round(latest_fuel_quantity / latest_trip_distance * 100, 2)
 
 
 def calculate_latest_trip_distance():
@@ -125,7 +125,7 @@ def calculate_latest_trip_distance():
     Calculates the latest trip distance by subtracting the last two readings.
     """
     odo_data = validate_data(1)
-    latest_trip_distance = odo_data[-1] - odo_data[-2]  # type: ignore
+    latest_trip_distance = odo_data[-1] - odo_data[-2]
     return latest_trip_distance
 
 
@@ -138,7 +138,7 @@ def calculate_total_trip_distance():
     readings.
     """
     odo_data = validate_data(1)
-    total_trip_distance = odo_data[-1] - odo_data[0]  # type: ignore
+    total_trip_distance = odo_data[-1] - odo_data[0]
     return total_trip_distance
 
 
@@ -149,7 +149,7 @@ def calculate_total_fuel_quantity():
     Calculates the total fuel quantity by summing all the fuel quantity data.
     """
     fuel_quantity_data = validate_data(2)
-    total_fuel_quantity = sum(fuel_quantity_data)  # type: ignore
+    total_fuel_quantity = sum(fuel_quantity_data)
     return total_fuel_quantity
 
 
@@ -160,7 +160,7 @@ def calculate_total_fuel_cost():
     Calculates the total fuel cost by summing all the fuel cost data.
     """
     fuel_cost_data = validate_data(3)
-    total_fuel_cost = sum(fuel_cost_data)  # type: ignore
+    total_fuel_cost = sum(fuel_cost_data)
     return round(total_fuel_cost, 2)
 
 
@@ -239,7 +239,7 @@ def validate_int_data(int_data):
     # Converts all items to integers and checks if they are all digits.
     if all(str(item).isdigit() for item in int_data):
         # Converts all items to integers and returns them in a list.
-        return list(map(int, int_data))   # type: ignore
+        return list(map(int, int_data))
     else:
         print(
             "Odometer readings data is invalid."
@@ -306,7 +306,6 @@ def odo_data_input():
 
         if validate_odo_input(odo_data):
             print("Odometer readings data input successful.")
-            fuel_data_input()
             break
 
     return odo_data
@@ -321,7 +320,7 @@ def fuel_data_input():
     """
     while True:
         print("Please input your fueling data:")
-        print("Example: 45.67")
+        print("Example: 23.45")
 
         fuel_quantity = input("Enter the fuel quantity here: \n")
         fuel_cost = input("Enter the fuel cost here: \n")
@@ -385,8 +384,70 @@ def validate_fuel_data(fuel_quantity, fuel_cost):
             return True
 
 
+def confirm_data_input(odo_data, fuel_quantity, fuel_cost):
+    """
+    Function to confirm data input.
+    Run a while loop until the user confirms the data input.
+    Calls the select_mode() function if data entry is successful.
+    """
+
+    new_data_input = [odo_data, fuel_quantity, fuel_cost]
+    while True:
+        print("Please confirm your data inputs:")
+        print(f"Odometer: {odo_data}km")
+        print(f"Fuel Quantity: {fuel_quantity}l")
+        print(f"Fuel Cost: {fuel_cost}EUR\n")
+        print("Press number to select action:")
+        print("1: Confirm, Save Data")
+        print("2: Re-enter data")
+        print("3: Cancel Data Input")
+
+        confirm_data = input("Enter the number of your selected action: \n")
+
+        if confirm_data == "1":
+            upload_data(new_data_input)
+            select_mode()
+            break
+        elif confirm_data == "2":
+            data_input()
+            break
+        elif confirm_data == "3":
+            print("Data input cancelled.")
+            select_mode()
+            break
+        else:
+            print("Invalid input. Please try again.")
+
+
+def upload_data(data):
+    """
+    Function to upload data to Google Sheets.
+    Calls the append_row() function to append the data to the Google Sheet.
+    """
+    try:
+        print("Data input confirmed.")
+        print("Uploading data to Google Sheets...")
+        WORKSHEET.append_row(data)
+        print("Data uploaded successfully.\n")
+    except Exception as e:
+        print(f"An error occurred: {e.args}")
+        select_mode()
+
+
+def data_input():
+    """
+    Function to input data.
+    Calls the odo_data_input() function to input odometer readings data.
+    Calls the fuel_data_input() function to input fueling data.
+    Calls the confirm_data_input() function to confirm data input.
+    """
+    odo_data = odo_data_input()
+    fuel_quantity, fuel_cost = fuel_data_input()
+    confirm_data_input(odo_data, fuel_quantity, fuel_cost)
+
+
 # Run the app:
 print("Welcome to the Car Fuel Metrics App")
 # select_mode()
 
-odo_data_input()
+data_input()
