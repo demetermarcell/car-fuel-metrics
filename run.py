@@ -341,6 +341,7 @@ def validate_odo_input(odo_data):
         try:
             odo_data_int = int(odo_data)
             odo_col_data = WORKSHEET.col_values(1)
+
             if len(odo_col_data) < 2:
                 return True  # First entry, skipping validation.
 
@@ -352,7 +353,11 @@ def validate_odo_input(odo_data):
                     )
                 print(f"Last reading: {last_odo_data}")
                 return False
-        except Exception:
+            else:
+                return True
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
             print(
                 "Unable to retrieve last odometer reading."
                 "First entry, skipping validation."
