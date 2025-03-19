@@ -317,22 +317,24 @@ def odo_data_input():
 
 # Validate input data functions:
 def validate_odo_input(odo_data):
+    """
+    Function to validate odometer readings data input.
+    Checks if the data is an integer.
+    Checks if the data is greater than the last reading.
+    """
     last_odo_data = validate_data(1)[-1] # This is integer.
-    print(last_odo_data)
     if not odo_data.isdigit():
-        print("Odometer readings data must be an integer. Example: 123456")
-        return True
-
-    odo_data_int = int(odo_data)
-
-    if int(odo_data_int) > last_odo_data:
-        print(
-            f"Odometer readings data must be greater than the last reading."
-            f"Last reading: {last_odo_data}"
-        )
-        return True
-    else:
+        print("Odometer readings data must be an integer.")
         return False
+    else:
+        odo_data_int = int(odo_data)
+
+        if int(odo_data_int) < last_odo_data:
+            print("Odometer reading must be greater than the last reading.")
+            print(f"Last reading: {last_odo_data}")
+            return False
+        else:
+            return True
 
 
 # Run the app:
